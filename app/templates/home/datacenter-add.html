@@ -1,0 +1,153 @@
+{% block ccs %}
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="{{ url_for("static",filename="css/font.css") }}">
+    <link rel="stylesheet" href="{{ url_for("static",filename="css/xadmin.css") }}">
+    <script type="text/javascript" src="{{ url_for("static",filename="js/jquery.min.js") }}"></script>
+    <script type="text/javascript" src="{{ url_for("static",filename="lib/layui/layui.js") }}" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ url_for("static",filename="js/xadmin.js") }}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="{{ url_for("static",filename="js/html5.min.js") }}"></script>
+      <script src="{{ url_for("static",filename="js/respond.min.js") }}"></script>
+    <![endif]-->
+{% endblock %}
+{% block content %}
+
+    <div class="x-body">
+        <form role="form" class="layui-form" method="post">
+            <div class="layui-form-item">
+                <label for="data_center_type" class="layui-form-label">
+                    <span class="x-red">*</span>机房类型
+                </label>
+                <div class="layui-input-inline">
+                    <select name="data_center_type">
+                        <option value="">AWS</option>
+                        <option value="0">AliYun</option>
+                        <option value="1">Huawei</option>
+                        <option value="2">Tencent</option>
+                        <option value="3">UCloud</option>
+                        <option value="4">Internel</option>
+                        <option value="5">Others</option>
+                    </select>
+                </div>
+                <label for="datacenter" class="layui-form-label">
+                    <span class="x-red">*</span>机房名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="datacenter" placeholder="例如:华南-深圳-阿里云-1"
+                           autocomplete="off" class="layui-input">
+                </div>
+                <label for="ip_range" class="layui-form-label">
+                    <span class="x-red">*</span>IP网段
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="ip_range"
+                           autocomplete="off" class="layui-input" placeholder="例如10.10.10.1/10.10.10.19">
+                </div>
+                 <label for="area" class="layui-form-label">
+                    <span class="x-red">*</span>地理位置
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="area"
+                           autocomplete="off" class="layui-input" placeholder="华东-上海">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="tablename" class="layui-form-label">
+                    <span class="x-red">*</span>状态
+                </label>
+                <div class="layui-input-inline">
+                    <select name="tablename">
+                        <option value="">待启用</option>
+                        <option value="0">维护中</option>
+                        <option value="1">启用中</option>
+                    </select>
+                </div>
+                <label for="aprover" class="layui-form-label">
+                    <span class="x-red">*</span>审批人
+                </label>
+                <div class="layui-input-inline">
+                    <select name="contrller">
+                        <option value="">审批人</option>
+                        <option value="0">DBA</option>
+                        <option value="1">主管</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label for="desc" class="layui-form-label">
+                    描述
+                </label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入内容，可以将机房维护情况与通知写入此处" id="content" name="desc" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">
+                    提交
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start' //指定元素
+            });
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#end' //指定元素
+            });
+        });
+        layui.use(['form', 'layer'], function () {
+            $ = layui.jquery;
+            var form = layui.form
+                , layer = layui.layer;
+
+            //自定义验证规则
+            form.verify({
+                nikename: function (value) {
+                    if (value.length < 5) {
+                        return '昵称至少得5个字符啊';
+                    }
+                }
+                , pass: [/(.+){6,12}$/, '密码必须6到12位']
+                , repass: function (value) {
+                    if ($('#L_pass').val() != $('#L_repass').val()) {
+                        return '两次密码不一致';
+                    }
+                }
+            });
+
+            //监听提交
+            form.on('submit(add)', function (data) {
+                console.log(data);
+                //发异步，把数据提交给php
+                layer.alert("增加成功", {icon: 6}, function () {
+                    // 获得frame索引
+                    var index = parent.layer.getFrameIndex(window.name);
+                    //关闭当前frame
+                    parent.layer.close(index);
+                });
+                return false;
+            });
+
+
+        });
+    </script>
+    <script>var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();</script>
+{% endblock %}

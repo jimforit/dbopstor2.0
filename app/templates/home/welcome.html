@@ -1,0 +1,138 @@
+{% block ccs %}
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="../../static/css/font.css">
+    <link rel="stylesheet" href="../../static/css/xadmin.css">
+    <script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+    <script src="../../static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../static/js/xadmin.js"></script>
+{% endblock %}
+{% block content %}
+    <body>
+    <div class="x-body layui-anim layui-anim-up">
+        <blockquote class="layui-elem-quote">欢迎：
+            <span class="x-red">{{ user.username }}</span>！上次登录时间:{{ user.addtime }}</blockquote>
+        <fieldset class="layui-elem-field">
+            <legend>数据统计</legend>
+            <div class="layui-field-box">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body">
+                            <div class="layui-carousel x-admin-carousel x-admin-backlog" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 90px;">
+                                <div carousel-item="">
+                                    <ul class="layui-row layui-col-space10 layui-this">
+                                        <li class="layui-col-xs1">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>工单数</h3>
+                                                <p>
+                                                    <cite>66</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs1">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>已处理工单数</h3>
+                                                <p>
+                                                    <cite>12</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs1">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3 style="color: red">待处理工单数</h3>
+                                                <p>
+                                                    <cite style="color: red">99</cite></p>
+                                            </a>
+                                        </li>
+                                         <li class="layui-col-xs1">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>备份任务总数</h3>
+                                                <p>
+                                                    <cite>60</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs1">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>备份成功</h3>
+                                                <p>
+                                                    <cite>48</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs1">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3 style="color: red">备份失败</h3>
+                                                <p>
+                                                    <cite style="color: red">20</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs1">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>定时任务总量</h3>
+                                                <p>
+                                                    <cite>100</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs1">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>当前执行</h3>
+                                                <p>
+                                                    <cite>20</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs1">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3>执行成功</h3>
+                                                <p>
+                                                    <cite>67</cite></p>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs1">
+                                            <a href="javascript:;" class="x-admin-backlog-body">
+                                                <h3 style="color: red">执行失败</h3>
+                                                <p>
+                                                    <cite style="color: red">13</cite></p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>系统通知</legend>
+            <div class="layui-field-box">
+                <table class="layui-table" lay-skin="line">
+                    <tbody>
+                        <tr>
+                            <td >
+                                <a class="x-a" target="_blank">当前工单数</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td >
+                                <a class="x-a" target="_blank">已处理工单数</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>开发团队</legend>
+            <div class="layui-field-box">
+                <table class="layui-table">
+                    <tbody>
+                        <tr>
+                            <th>版权所有</th>
+                            <td>中信网络股份有限公司
+                                <a href="http://x.xuebingsi.com/" class='x-a' target="_blank">访问官网</a></td>
+                        </tr>
+                        <tr>
+                            <th>开发者</th>
+                            <td>蒋新明(603668227@qq.com)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+{% endblock %}

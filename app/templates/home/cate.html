@@ -1,0 +1,155 @@
+{% block css %}
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="{{ url_for('static',filename="css/font.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename="css/xadmin.css") }}">
+    <script type="text/javascript" src="{{ url_for('static',filename="js/jquery.min.js") }}"></script>
+    <script src="{{ url_for('static',filename="lib/layui/layui.js") }}" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename="js/xadmin.js") }}"></script>
+
+{% endblock %}
+{% block content%}
+  <body>
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a>首页</a>
+        <a>
+          <cite>机房管理</cite></a>
+      </span>
+      <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+    <div class="layui-row">
+            <form class="layui-form layui-col-md12 x-so">
+                <input class="layui-input" placeholder="开始日" name="start" id="start">
+                <input class="layui-input" placeholder="截止日" name="end" id="end">
+                <div class="layui-input-inline">
+                    <select name="data_center_type">
+                        <option value="">机房类型</option>
+                        <option value="0">AWS</option>
+                        <option value="1">AliYun</option>
+                        <option value="2">Huawei</option>
+                        <option value="3">Tencent</option>
+                        <option value="4">UCloud</option>
+                        <option value="5">Internel</option>
+                        <option value="6">Others</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="area">
+                        <option value="">地理位置</option>
+                        <option value="1">华南-深圳</option>
+                        <option value="2">华东-上海</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select  name="owner">
+                        <option value="">责任人</option>
+                        <option value="1">竹鼠</option>
+                        <option value="2">老虎</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                <input type="text" name="username" placeholder="请输入IP地址" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-input-inline">
+                    <select  name="owner">
+                        <option value="">状态</option>
+                        <option value="1">启用中</option>
+                        <option value="2">维护中</option>
+                        <option value="3">待启用</option>
+                    </select>
+                </div>
+        <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+    </div>
+      <xblock>
+        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+          <button class="layui-btn" onclick="x_admin_show('创建工单','{{ url_for("home.data_center_add") }}')"><i class="layui-icon"></i>创建</button>
+        <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+      </xblock>
+      <table class="layui-table layui-form">
+        <thead>
+          <tr>
+            <th width="20">
+              <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+            </th>
+            <th width="70">机房ID</th>
+            <th width="70">机房类型</th>
+            <th width="50">地理位置</th>
+            <th width="50">IP网段</th>
+              <th width="50">状态</th>
+            <th width="220">操作</th>
+        </thead>
+        <tbody class="x-cate">
+          <tr cate-id='1' fid='0' >
+            <td>
+              <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
+            </td>
+            <td>1</td>
+            <td>
+              <i class="layui-icon x-show" status='true'>&#xe623;</i>
+              阿里云
+            </td>
+            <td><i status='true'></i>华南-深圳</td>
+              <td><i status='true'></i>10.10.10.1/10.10.10.199</td>
+            <td>
+              <input type="checkbox" name="switch"  lay-text="开启|停用"  checked="" lay-skin="switch">
+            </td>
+            <td class="td-manage">
+              <button class="layui-btn layui-btn layui-btn-xs"  onclick="x_admin_show('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
+              <button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,'要删除的id')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    {% endblock %}
+{% block js %}
+    <script>
+       layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start' //指定元素
+            });
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#end' //指定元素
+            });
+        });
+
+
+      
+
+      /*用户-删除*/
+      function member_del(obj,id){
+          layer.confirm('确认要删除吗？',function(index){
+              //发异步删除数据
+              $(obj).parents("tr").remove();
+              layer.msg('已删除!',{icon:1,time:1000});
+          });
+      }
+
+
+
+      function delAll (argument) {
+
+        var data = tableCheck.getData();
+  
+        layer.confirm('确认要删除吗？'+data,function(index){
+            //捉到所有被选中的，发异步进行删除
+            layer.msg('删除成功', {icon: 1});
+            $(".layui-form-checked").not('.header').parents('tr').remove();
+        });
+      }
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+{% endblock %}
