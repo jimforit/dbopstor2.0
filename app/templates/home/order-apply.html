@@ -20,35 +20,34 @@
                     <span class="x-red">*</span>项目名称
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text" id="username" name="username" required="" lay-verify="required"
-                           autocomplete="off" class="layui-input">
+                    <input type="text" id="username" name="ordername" lay-verify="required" class="layui-input">
                 </div>
                 <label for="username" class="layui-form-label">
                     <span class="x-red">*</span>工单类型
                 </label>
                 <div class="layui-input-inline">
-                    <select name="contrller">
-                        <option value="1">实例申请</option>
+                    <select name="ordertype">
+                        <option value="实例申请">实例申请</option>
                     </select>
                 </div>
                 <label for="headmaster" class="layui-form-label">
                     <span class="x-red">*</span>直接主管
                 </label>
                 <div class="layui-input-inline">
-                    <select name="contrller">
+                    <select name="supervisor">
                         <option value="">审批人</option>
-                        <option value="0">DBA</option>
-                        <option value="1">主管</option>
+                        <option value="DBA">DBA</option>
+                        <option value="主管">主管</option>
                     </select>
                 </div>
                 <label for="aprover" class="layui-form-label">
                     <span class="x-red">*</span>审批人
                 </label>
                 <div class="layui-input-inline">
-                    <select name="contrller">
-                        <option value="">审批人</option>
-                        <option value="0">DBA</option>
-                        <option value="1">主管</option>
+                    <select name="handler">
+                        {% for item in users %}
+                        <option value="{{ item.id }}">{{ item.username }}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>
@@ -57,32 +56,38 @@
                     <span class="x-red">*</span>配置类型
                 </label>
                 <div class="layui-input-inline">
-                    <select name="contrller">
-                        <option value="">主从复制</option>
-                        <option value="0">MHA高可用</option>
-                        <option value="1">MySQL组复制</option>
-                        <option value="2">PXC高可用</option>
-                        <option value="3">Glera高可用</option>
-                        <option value="4">Redis哨兵高可用</option>
-                        <option value="5">Redis Cluster高可用</option>
-                        <option value="6">MongoDB副本集高可用</option>
+                    <select name="config_type">
+                        <option value="主从复制">主从复制</option>
+                        <option value="MHA高可用">MHA高可用</option>
+                        <option value="MySQL组复制">MySQL组复制</option>
+                        <option value="PXC高可用">PXC高可用</option>
+                        <option value="Glera高可用">Glera高可用</option>
+                        <option value="Redis哨兵高可用">Redis哨兵高可用</option>
+                        <option value="Redis Cluster高可用">Redis Cluster高可用</option>
+                        <option value="MongoDB副本集高可用">MongoDB副本集高可用</option>
+                        <option value="MongoDB单机实例">MongoDB单机实例</option>
+                        <option value="Redis单机实例">Redis单机实例</option>
+                        <option value="MySQL单机实例">MySQL单机实例</option>
                     </select>
                 </div>
                 <label for="phone" class="layui-form-label">
                     <span class="x-red">*</span>期望时限
                 </label>
                 <div class="layui-input-inline">
-                    <input class="layui-input" placeholder="截止日" name="end" id="end">
+                    <input class="layui-input" placeholder="截止日" name="order_end" id="end">
+                    {% for err in form.order_end.errors %}
+                        <p style="color: red">{{ err }}</p>
+                    {% endfor %}
                 </div>
                 <label for="phone" class="layui-form-label">
                     <span class="x-red">*</span>节点数量
                 </label>
                 <div class="layui-input-inline">
-                    <select name="contrller">
-                        <option value="">1</option>
-                        <option value="0">2</option>
-                        <option value="1">3</option>
-                        <option value="2">4</option>
+                    <select name="node_num">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
                     </select>
                 </div>
                 <label for="phone" class="layui-form-label">
@@ -90,10 +95,10 @@
                 </label>
                 <div class="layui-input-inline">
                     <select name="core_num">
-                        <option value="0">4核心8线程</option>
-                        <option value="1">8核心16线程</option>
-                        <option value="2">2核心4线程</option>
-                        <option value="3">16核心32线程</option>
+                        <option value="4核心8线程">4核心8线程</option>
+                        <option value="8核心16线程">8核心16线程</option>
+                        <option value="2核心4线程">2核心4线程</option>
+                        <option value="16核心32线程">16核心32线程</option>
                     </select>
                 </div>
             </div>
@@ -103,11 +108,11 @@
                 </label>
                 <div class="layui-input-inline">
                     <select name="memory">
-                        <option value="0">16G</option>
-                        <option value="1">32G</option>
-                        <option value="2">64G</option>
-                        <option value="3">128G</option>
-                        <option value="4">256G</option>
+                        <option value="16G">16G</option>
+                        <option value="32G">32G</option>
+                        <option value="64G">64G</option>
+                        <option value="128G">128G</option>
+                        <option value="256G">256G</option>
                     </select>
                 </div>
                 <label for="disk_type" class="layui-form-label">
@@ -115,10 +120,10 @@
                 </label>
                 <div class="layui-input-inline">
                     <select name="disk_type">
-                        <option value="0">SATA</option>
-                        <option value="1">SAS</option>
-                        <option value="2">SSD</option>
-                        <option value="3">Flash</option>
+                        <option value="SATA">SATA</option>
+                        <option value="SAS">SAS</option>
+                        <option value="SSD">SSD</option>
+                        <option value="Flash">Flash</option>
                     </select>
                 </div>
                 <label for="disk_volume" class="layui-form-label">
@@ -126,9 +131,9 @@
                 </label>
                 <div class="layui-input-inline">
                     <select name="disk_volume">
-                        <option value="0">500GB</option>
-                        <option value="1">1TB</option>
-                        <option value="2">2TB</option>
+                        <option value="500GB">500GB</option>
+                        <option value="1TB">1TB</option>
+                        <option value="2TB">2TB</option>
                     </select>
                 </div>
                 <label for="disk_volume" class="layui-form-label">
@@ -136,12 +141,12 @@
                 </label>
                 <div class="layui-input-inline">
                     <select name="disk_volume">
-                        <option value="0">RAID1+0</option>
-                        <option value="1">RAID5</option>
+                        <option value="RAID10">RAID10</option>
+                        <option value="RAID5">RAID5</option>
                     </select>
                 </div>
             </div>
-            <div class="layui-form-item layui-form-text">
+            <div class="layui-form-item">
                 <label for="desc" class="layui-form-label">
                     描述
                 </label>
@@ -155,6 +160,7 @@
                 <button class="layui-btn" lay-filter="add" lay-submit="">
                     提交
                 </button>
+                {{ form.csrf_token }}
             </div>
         </form>
     </div>

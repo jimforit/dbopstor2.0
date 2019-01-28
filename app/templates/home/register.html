@@ -28,7 +28,7 @@
     {% for msg in get_flashed_messages(category_filter=["ok"]) %}
         <p class="login-box-msg" style="color: green">{{ msg }}</p>
     {% endfor %}
-    <form role="form" method="post" class="layui-form">
+    <form name="register" role="form" method="post" class="layui-form">
         <div class="layui-form-item">
             <label for="username" class="layui-form-label">
                 <span class="x-red">*</span>{{ form.username.label }}

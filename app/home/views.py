@@ -2,7 +2,7 @@ from app import db
 from flask import render_template, url_for, redirect, flash, session, request
 from werkzeug.security import generate_password_hash
 from functools import wraps
-from app.home.forms import UserForm,RegisterForm,UserEditForm,PwdEditForm
+from app.home.forms import UserForm,RegisterForm,UserEditForm,PwdEditForm,OrderApplyForm
 from app.home import home
 from app.models import User,Userlog,Role,Order
 import json
@@ -50,7 +50,7 @@ def login():
 def index():
     return render_template("home/index.html")
 
-@home.route("/welcome/", methods=["GET"])
+@home.route("/api/welcome/", methods=["GET"])
 @user_login
 def system_detail():
     form={}
@@ -96,33 +96,43 @@ def host_add():
     return render_template("home/host-add.html")
 
 
-@home.route("/user_list/", methods=["POST","GET"])
+@home.route("/api/user/", methods=["POST","GET","PUT","DELETE"])
 @user_login
 def user_list():
     """退出登录清理会话信息"""
     form = UserForm()
-    if request.method=="GET":
-        user = User.query.filter_by().all()
-    else:
+    if request.method=="DELETE":
+        form = json.loads(request.data.decode())
+        data = form['cid']
+        if type(data) == 'dict':
+            for key in data.keys():
+                user = User.query.filter_by(id=int(data[key])).first()
+                db.session.delete(user)
+                db.session.commit()
+        else:
+            user = User.query.filter_by(id=int(data)).first()
+            db.session.delete(user)
+            db.session.commit()
+    elif request.method=="PUT":
+        form = json.loads(request.data.decode())
+        user = User.query.filter_by(id=form["id"]).first()
+        if form["action"] == "active":
+            user.status = 1
+        else:
+            user.status = 0
+        db.session.add(user)
+        db.session.commit()
+
+    #获取最新User列表
+    user = User.query.filter_by().all()
+
+    if request.method=="POST":
         uname = request.form["username"]
         start = request.form["start"]
         end = request.form["start"]
+        #获取查询User列表
         user = User.query.filter_by(username=uname).all()
-    count = len(user)
-    return render_template("home/member-list.html", form=user, count=count)
-
-@home.route("/user/disable/", methods=["POST"])
-@user_login
-def user_disable():
-    form=json.loads(request.data.decode())
-    user = User.query.filter_by(id=form["id"]).first()
-    if form["action"]=="active":
-        user.status=1
-    else:
-        user.status=0
-    db.session.add(user)
-    db.session.commit()
-    return redirect(url_for('home.user_list'))
+    return render_template("home/member-list.html", form=user)
 
 @home.route("/user/edit/<int:id>/", methods=["POST","GET"])
 @user_login
@@ -145,6 +155,7 @@ def user_edit(id=None):
     return render_template("home/member-edit.html", form=form, user=user)
 
 
+
 @home.route("/user/password/<int:id>/", methods=["POST","GET"])
 @user_login
 def user_cpwd(id=None):
@@ -153,7 +164,6 @@ def user_cpwd(id=None):
     if request.method=="GET":
         pass
     else:
-        print(form.data)
         if form.validate_on_submit():
             if user.check_pwd(form.data["oldpwd"]):
                 user.pwd=generate_password_hash(form.data["pwd"])
@@ -168,35 +178,11 @@ def user_cpwd(id=None):
             flash("修改失败", "err")
     return render_template("home/member-password.html", form=form, user=user)
 
-@home.route("/user/delete/", methods=["POST"])
-@user_login
-def user_del():
-    form = json.loads(request.data.decode())
-    data = form['cid']
-    if type(data)=='dict':
-        for key in data.keys():
-            user=User.query.filter_by(id=int(data[key])).first()
-            db.session.delete(user)
-            db.session.commit()
-    else:
-        user = User.query.filter_by(id=int(data)).first()
-        db.session.delete(user)
-        db.session.commit()
-    return redirect(url_for('home.user_list'))
-
-@home.route("/user/add/", methods=["POST","GET"])
-@user_login
-def user_add():
-    """退出登录清理会话信息"""
-    return render_template("home/member-add.html")
-
 @home.route("/order_list/", methods=["POST","GET"])
 @user_login
 def order_list():
     """工单信息列表"""
     order = Order.query.filter(Order.order_status==0).all()
-    for item in order:
-        print(item.order_status)
     return render_template("home/order-list.html",order=order)
 
 @home.route("/order_apply/", methods=["POST","GET"])
@@ -204,11 +190,18 @@ def order_list():
 def order_apply():
     """工单信息列表"""
     #apply_info = User.query.join(order)(User.id==order.order_apply_id).all()
-    #handler_info = User.query.join(order)(User.id==order.order_hander_id).all()
+    form=OrderApplyForm()
+    user = User.query.filter(User.role_id.in_([1, 2])).all()
+    if request.method=="GET":
+        pass
+    else:
+        print(form.data)
+        print(form.validate_on_submit())
+        print(form.errors)
+        print(request.form)
+    return render_template("home/order-apply.html",form=form,users=user)
 
-    return render_template("home/order-apply.html")
-
-@home.route("/order_add/", methods=["POST","GET"])
+@home.route("/order/add/", methods=["POST","GET"])
 @user_login
 def order_add():
     """工单信息列表"""
@@ -234,4 +227,5 @@ def register():
         db.session.commit()  # 提交数据
         flash("注册成功！", "ok") # 使用flask存储成功信息
         return redirect(url_for("home.login"))  # 渲染模板
-    return render_template("home/register.html", form=form) # 渲染模板
+    return render_template("home/register.html", form=form)  # 渲染模板
+

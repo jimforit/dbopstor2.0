@@ -34,7 +34,7 @@
     </div>
     <xblock>
         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-        <span class="x-right" style="line-height:40px">共有数据：{{ count }} 条</span>
+        <span class="x-right" style="line-height:40px">共有数据：{{ form|length }} 条</span>
     </xblock>
     <table class="layui-table">
     <thead>
@@ -121,8 +121,8 @@
                     $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
                     layer.msg('已停用!', {icon: 5, time: 1000});
                     $.ajax({
-                        type: "POST",  //请求方式
-                        url: "{{ url_for("home.user_disable") }}",  //请求路径：页面/方法名字
+                        type: "PUT",  //请求方式
+                        url: "{{ url_for("home.user_list") }}",  //请求路径：页面/方法名字
                         data: JSON.stringify({action: "inactive", id: uid}),     //参数
                         dataType: "text",
                         contentType: "application/json; charset=utf-8"
@@ -133,8 +133,8 @@
                     $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
                     layer.msg('已启用!', {icon: 5, time: 1000});
                     $.ajax({
-                        type: "POST",  //请求方式
-                        url: "{{ url_for("home.user_disable") }}",  //请求路径：页面/方法名字
+                        type: "PUT",  //请求方式
+                        url: "{{ url_for("home.user_list") }}",  //请求路径：页面/方法名字
                         data: JSON.stringify({action: "active", id: uid}),     //参数
                         dataType: "text",
                         contentType: "application/json; charset=utf-8"
@@ -152,8 +152,8 @@
                 layer.msg('已删除!', {icon: 1, time: 1000});
                 layer.msg(id, {icon: 1, time: 1000});
                 $.ajax({
-                        type: "POST",  //请求方式
-                        url: "{{ url_for("home.user_del") }}",  //请求路径：页面/方法名字
+                        type: "DELETE",  //请求方式
+                        url: "{{ url_for("home.user_list") }}",  //请求路径：页面/方法名字
                         data: JSON.stringify({cid: id}),     //参数
                         dataType: "text",
                         contentType: "application/json; charset=utf-8"
@@ -174,8 +174,8 @@
                  }
                 $(".layui-form-checked").not('.header').parents('tr').remove();
                 $.ajax({
-                        type: "POST",  //请求方式
-                        url: "{{ url_for("home.user_del") }}",  //请求路径：页面/方法名字
+                        type: "DELETE",  //请求方式
+                        url: "{{ url_for("home.user_list") }}",  //请求路径：页面/方法名字
                         data: JSON.stringify({cid: arr}),     //参数
                         dataType: "text",
                         contentType: "application/json; charset=utf-8"

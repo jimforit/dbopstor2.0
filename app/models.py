@@ -18,7 +18,7 @@ class User(db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey("role.id")) # 用户角色 1管理员 2部门主管 3开发人员
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return '<User %r>' % self.username
 
     def check_pwd(self, pwd):
         """
